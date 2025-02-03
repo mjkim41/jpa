@@ -9,7 +9,7 @@ spring:
     password: mariadb
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
-    # DBMS dialect setting
+    # DBMS dialect setting : strategy 선택할 때 갈피 잡음(그래야 로그를 maria db 방식으로 찍음)
     database-platform: org.hibernate.dialect.MariaDB106Dialect
     hibernate:
       # ddl
