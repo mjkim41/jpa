@@ -21,7 +21,7 @@ public class Student {
     @Id
     @Column(name="stu_id")
     // id 랜덤문자로 만들기
-    @UuidGenerator
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID id;
 
     @Column(name="stu_name", nullable=false)
