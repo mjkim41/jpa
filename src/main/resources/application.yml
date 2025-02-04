@@ -8,15 +8,23 @@ spring:
     username: root
     password: mariadb
     driver-class-name: org.mariadb.jdbc.Driver
+  ### Spring JPA 관련 셋팅 ###
   jpa:
-    # DBMS dialect setting : strategy 선택할 때 갈피 잡음(그래야 로그를 maria db 방식으로 찍음)
+    # database-platform : sql 구문을 날릴 때 뜽에 어떤 DB 언어를 기준으로 작성해야 될 것인지 갈피를 잡게 해 줌
+    #                       - org.hibernate는 Spring Data JPA 를 사용하면 기본적으로 딸려 오는 패키지임
     database-platform: org.hibernate.dialect.MariaDB106Dialect
+    # Hibernate : ORM(Object-Relationap Mapping) 프레임 워크
     hibernate:
       # ddl
+      #  - create : 매번 테이블 drop 후 재생성
+      #  - update : alter table if exists tbl_product
+      #  - none : 아무것도 못함
       ddl-auto: create
     properties:
       hibernate:
+        # format_sql : SQL 로그 찍힐 때, 줄 맞춰서 이쁘게 나오게
         format_sql: true # SQL log
+    # 위에 database-platform 설정해줬으므로 생략해줘도 되긴 함
     database: mysql
 
 # log level setting

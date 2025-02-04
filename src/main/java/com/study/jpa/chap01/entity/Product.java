@@ -8,16 +8,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+//@Setter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 
-// Entity : JPA 에서 쓰는 annotation 으로, 이 클래스가 데이터베이스와 1대1로 대응되는 엔터티 클래스임을 JPA에게 알려주는 태그
+// 1. 클래스 이름에 @Entity, @Table(name="DB 테이블명") 설정
+//   - @Entity : DB랑 연결된 클래스이다.
+//    - @Table(name="db 테이블명") : DB의 00 테이블과 연결된 클래스이다.
 @Entity
-// @Table : DB 테이블명 지정
 @Table(name = "tbl_product")
 public class Product {
 
@@ -46,6 +47,7 @@ public class Product {
     @Column(name = "prod_price", nullable = true)
     private int price; // 상품 가격
 
+    // DEFAULT CURRENT_TIMESTAP ON UPDATE CURRENT_TIMESTAMP
     // @CreationTimestamp : insert시 자동으로 현재 시간 저장
     @Column(updatable = false) // 수정불가
     @CreationTimestamp
@@ -62,7 +64,14 @@ public class Product {
     private Category category;
 
     public enum Category {
-        FOOD, FASHION, ELETRONIC
+        FOOD, FASHION, ELECTRONIC
+    }
+
+    // 수정 편의 메서드
+    public void changeProduct(String newName, int newPrice, Category newCategory) {
+        this.name = newName;
+        this.price = newPrice;
+        this.category = newCategory;
     }
 
 
