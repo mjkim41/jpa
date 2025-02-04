@@ -5,7 +5,8 @@ import lombok.*;
 
 @Setter
 @Getter
-//@ToString
+// @ToString 시 제외하기
+@ToString(exclude = {"department"})
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -25,14 +26,9 @@ public class Employee {
 
     // DB 아닌 Java의 패러다임을 가져와서, FK만 가져오는 게 아니라 Entity 자체를 가져옴
     // Employee 가 Department에 대해서 Many
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // ! FetchType.LAZY = 사원 정보 조회할 때 fk로 연결된 DEPARTMENT 는 조인 안함. 코드 볼 것 !!
     @JoinColumn(name = "dept_id") // FK 컬럼명
     private Department department;
-
-    @Override
-    public String toString() {
-        return "Employee [id=" + id+ ", name=" + name + ", department=" + department + "]";
-    }
 
 
 }
