@@ -24,9 +24,13 @@ public class Employee {
     @Column(name = "emp_name", nullable = false)
     private String name; // 사원명
 
-    // DB 아닌 Java의 패러다임을 가져와서, FK만 가져오는 게 아니라 Entity 자체를 가져옴
-    // Employee 가 Department에 대해서 Many
-    @ManyToOne(fetch = FetchType.LAZY) // ! FetchType.LAZY = 사원 정보 조회할 때 fk로 연결된 DEPARTMENT 는 조인 안함. 코드 볼 것 !!
+    // 다태일 테이블에서 '다'에 해당하는 eNTITY에 특별히 해줘야 되는 작업!
+    // 1. field에 1:N에서 1에 해당하는 Entity를 통째로 넣기
+    // 2. @ManyToOne(fetch = FetchType.LAZY/EAGER)
+    // - LAZY : FK로 연결된 테이블의 내용의 경우, 그 테이블의 내용을 사용할 때만 join 에서 가져옴
+    // - EAGERLY : 항상 조인
+    @ManyToOne(fetch = FetchType.LAZY)
+    // 3. @JoinColumn(name = " FK의 DB상 이름 ")
     @JoinColumn(name = "dept_id") // FK 컬럼명
     private Department department;
 
