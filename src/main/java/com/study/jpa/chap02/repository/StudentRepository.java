@@ -35,8 +35,8 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
     // JPQL 사용하기 :
     // 1. @Query annotation 붙이기 / 테이블 이름이 아니라 entity 기준으로 어노테이션 안 내용이 작성됨 / ?!는 첫번째 parameter 라는 뜻(city)
     // 도시 이름으로 학생정보 조회
-    @Query("SELECT st FROM Student st WHERE st.city = ?1")
-    List<Student> getStudentByCity(String city);
+    @Query("SELECT st FROM Student st WHERE st.name = ?1")
+    List<Student> getStudentByName(String name);
 
 
 

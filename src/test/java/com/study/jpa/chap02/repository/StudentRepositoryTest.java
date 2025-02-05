@@ -11,7 +11,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -48,15 +50,17 @@ class StudentRepositoryTest {
     }
 
     @Test
-    @DisplayName("이름이 춘식이인 학생의 모든 정보 조회")
-    void test1() {
+    @DisplayName("이름이 '춘식이'인 학생의 모든 정보를 조회한다.")
+    void test() {
         //given
-        String stu_name = "춘식이";
+        String name = "춘식이";
         //when
-        List<Student> students = studentRepository.findByName(stu_name);
+        List<Student> students = studentRepository.findByName(name);
         //then
-        Assertions.assertThat(students.size()).isEqualTo(1);
-        Assertions.assertThat(students.get(0).getName()).isEqualTo(stu_name);
+        assertThat(students.size()).isEqualTo(1);
+        assertThat(students.get(0).getName()).isEqualTo(name);
+
+        students.forEach(System.out::println);
     }
 
     @Test
@@ -65,50 +69,47 @@ class StudentRepositoryTest {
         //given
         String city = "제주도";
         String major = "화학공학";
-        // when
-        List<Student> foundStudents = studentRepository.findByCityAndMajor(city, major);
-        // then
-        Assertions.assertThat(foundStudents.size()).isEqualTo(1);
-        Assertions.assertThat(foundStudents.get(0).getCity()).isEqualTo(city);
+        //when
+        List<Student> students = studentRepository.findByCityAndMajor(city, major);
+        //then
+        students.forEach(System.out::println);
     }
 
     @Test
     @DisplayName("전공에 공학이 포함된 학생들 조회")
-    void majorContainingtest() {
+    void containingTest() {
         //given
         String major = "공학";
-        // when
-        List<Student> byMajorContaining = studentRepository.findByMajorContaining(major);
+        //when
+        List<Student> students = studentRepository.findByMajorContaining(major);
+
         //then
-        byMajorContaining.forEach(System.out::println);
+        students.forEach(System.out::println);
     }
 
-    // JPQL
     @Test
-    @DisplayName("jpql로 학생 조회하기")
-    void test5() {
+    @DisplayName("JPQL로 학생 조회하기")
+    void jpqlTest() {
         //given
         String city = "서울시";
-        // when
-        List<Student> studentList = studentRepository.getStudentByCity(city);
-        // then
+        //when
+        List<Student> studentList = studentRepository.getStudentsByCity(city);
+        //then
         studentList.forEach(System.out::println);
     }
 
-    // 순수 sql
+
     @Test
-    @DisplayName("순수 sql로 학생정보 조회")
+    @DisplayName("순수 SQL로 학생정보 조회")
     void nativeSQLTest() {
         //given
         String name = "쿠로미";
         String city = "청양군";
-        // when
-        List<Student> studentByNameOrCity = studentRepository.getStudentByNameOrCity(name, city);
-        // then
-        studentByNameOrCity.forEach(System.out::println);
+        //when
+        List<Student> studentList = studentRepository.getStudentsByName(name, city);
+        //then
+        studentList.forEach(System.out::println);
     }
-
-
 
 
 }

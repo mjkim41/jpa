@@ -1,17 +1,17 @@
+
 package com.study.jpa.chap03.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter
-@Getter
-// @ToString 시 제외하기
+@Setter @Getter
 @ToString(exclude = {"department"})
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @Builder
 
+// 사원 N
 @Entity
 @Table(name = "tbl_emp")
 public class Employee {
@@ -19,20 +19,21 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "emp_id")
-    private Long id;
+    private Long id; // 사원번호
 
     @Column(name = "emp_name", nullable = false)
     private String name; // 사원명
 
-    // 다태일 테이블에서 '다'에 해당하는 eNTITY에 특별히 해줘야 되는 작업!
-    // 1. field에 1:N에서 1에 해당하는 Entity를 통째로 넣기
-    // 2. @ManyToOne(fetch = FetchType.LAZY/EAGER)
-    // - LAZY : FK로 연결된 테이블의 내용의 경우, 그 테이블의 내용을 사용할 때만 join 에서 가져옴
-    // - EAGERLY : 항상 조인
+    // 단방향 매핑 - DBMS처럼 한쪽에 상대의 PK를 FK로 갖는형태
     @ManyToOne(fetch = FetchType.LAZY)
-    // 3. @JoinColumn(name = " FK의 DB상 이름 ")
     @JoinColumn(name = "dept_id") // FK 컬럼명
     private Department department;
+
+    // 부서 수정 편의메서드
+    public void changeDepartment(Department department) {
+        this.department = department;
+        department.getEmployees().add(this);
+    }
 
 
 }
