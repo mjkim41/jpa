@@ -91,9 +91,9 @@ class StudentRepositoryTest {
     @DisplayName("JPQL로 학생 조회하기")
     void jpqlTest() {
         //given
-        String city = "서울시";
+        String name = "돌돌";
         //when
-        List<Student> studentList = studentRepository.getStudentsByCity(city);
+        List<Student> studentList = studentRepository.getStudentByName(name);
         //then
         studentList.forEach(System.out::println);
     }
@@ -106,7 +106,7 @@ class StudentRepositoryTest {
         String name = "쿠로미";
         String city = "청양군";
         //when
-        List<Student> studentList = studentRepository.getStudentsByName(name, city);
+        List<Student> studentList = studentRepository.getStudentByNameOrCity(name, city);
         //then
         studentList.forEach(System.out::println);
     }

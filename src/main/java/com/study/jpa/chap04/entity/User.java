@@ -1,3 +1,4 @@
+
 package com.study.jpa.chap04.entity;
 
 import jakarta.persistence.*;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"purchases"})
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
