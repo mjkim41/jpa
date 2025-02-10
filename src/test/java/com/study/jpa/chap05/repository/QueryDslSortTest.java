@@ -3,6 +3,7 @@ package com.study.jpa.chap05.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.jpa.chap05.entity.Group;
 import com.study.jpa.chap05.entity.Idol;
+import com.study.jpa.chap05.entity.QGroup;
 import com.study.jpa.chap05.entity.QIdol;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.study.jpa.chap05.entity.QGroup.*;
 import static com.study.jpa.chap05.entity.QIdol.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Transactional
@@ -93,6 +97,35 @@ public class QueryDslSortTest {
         pagedIdols.forEach(System.out::println);
     }
 
+    @Test
+    @DisplayName("특정 그룹의 아이돌을 이름 기준으로 오름차순 정렬 및 페이징 처리 조회")
+    void testSortByNameAscAndPagingForGroup() {
+        // given
+        String groupName = "아이브";
+        int pageNumber = 1; // 첫 번째 페이지
+        int pageSize = 2; // 페이지당 데이터 수
 
+        int offset = (pageNumber - 1) * pageSize;
+
+        // when
+        List<Idol> pagedIdols = factory
+                .selectFrom(idol)
+                .where(idol.group.groupName.eq(groupName))
+                .orderBy(idol.idolName.asc())
+                .offset(offset)
+                .limit(pageSize)
+                .fetch();
+
+        // then
+        assertNotNull(pagedIdols);
+        assertEquals(pageSize, pagedIdols.size());
+
+        System.out.println("\n\n\n");
+        pagedIdols.forEach(System.out::println);
+        System.out.println("\n\n\n");
+
+        // 추가 검증 예시: 첫 번째 페이지의 첫 번째 아이돌이 이름순으로 올바르게 정렬되었는지 확인
+        assertEquals("가을", pagedIdols.get(0).getIdolName());
+    }
 
 }
