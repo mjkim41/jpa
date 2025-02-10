@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import static com.study.jpa.chap05.entity.QIdol.*;
 
 @SpringBootTest
 @Transactional
+@Rollback(false)
 public class QueryDslGroupingTest {
 
     @Autowired
@@ -69,24 +71,99 @@ public class QueryDslGroupingTest {
     }
 
     @Test
-    @DisplayName("SELECT절에서 원하는 컬럼만 지정조회 : TUPLE")
+    @DisplayName("SELECT절에서 원하는 컬럼만 지정조회")
     void tupleTest() {
         //given
 
         //when
-        // ***** Tuple : 여러 행을 반환
         List<Tuple> idolList = factory
                 .select(idol.idolName, idol.age)
                 .from(idol)
                 .fetch();
 
         //then
-        // ***** tumple
         for (Tuple tuple : idolList) {
             String name = tuple.get(idol.idolName);
             Integer age = tuple.get(idol.age);
 
             System.out.printf("이름: %s, 나이: %d세\n", name, age);
+        }
+    }
+
+    @Test
+    @DisplayName("그룹화 기본")
+    void groupByTest() {
+        //given
+
+        //when
+        Integer sum = factory
+                .select(idol.age.sum())
+                .from(idol)
+                .fetchOne();
+
+        //then
+        System.out.println("sum = " + sum);
+    }
+
+    @Test
+    @DisplayName("그룹별 인원수 세기")
+    void groupByCountTest() {
+        //given
+
+        //when
+
+        /*
+            GROUP BY group_id, group_name
+         */
+        List<Tuple> idolCounts = factory
+                .select(idol.group.groupName, idol.count())
+                .from(idol)
+                .groupBy(idol.group.id)
+                .fetch();
+        //then
+        for (Tuple tuple : idolCounts) {
+            String groupName = tuple.get(idol.group.groupName);
+            Long count = tuple.get(idol.count());
+            System.out.printf("그룹명: %s, 인원수: %d명\n", groupName, count);
+        }
+    }
+
+    @Test
+    @DisplayName("성별별 아이돌 인원수 세기")
+    void groupByGenderTest() {
+        //given
+
+        //when
+        List<Tuple> idols = factory
+                .select(idol.count(), idol.gender)
+                .from(idol)
+                .groupBy(idol.gender)
+                .fetch();
+        //then
+        for (Tuple tuple : idols) {
+            String gender = tuple.get(idol.gender);
+            Long count = tuple.get(idol.count());
+            System.out.printf("성별: %s, 인원수: %d명\n", gender, count);
+        }
+    }
+
+    @Test
+    @DisplayName("그룹별로 그룹명과 평균나이를 조회")
+    void groupAvgAgeTest() {
+        //given
+
+        //when
+        List<Tuple> idols = factory
+                .select(idol.group.groupName, idol.age.avg())
+                .from(idol)
+                .groupBy(idol.group)
+                .having(idol.age.avg().between(20, 25))
+                .fetch();
+        //then
+        for (Tuple tuple : idols) {
+            String groupName = tuple.get(idol.group.groupName);
+            Double average = tuple.get(idol.age.avg());
+            System.out.printf("그룹명: %s, 평균나이: %.2f세\n", groupName, average);
         }
     }
 
