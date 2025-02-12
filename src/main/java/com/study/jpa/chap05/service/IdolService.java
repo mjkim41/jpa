@@ -1,19 +1,17 @@
 package com.study.jpa.chap05.service;
 
+import com.study.jpa.chap05.dto.GroupAverageResponse;
 import com.study.jpa.chap05.dto.IdolResponse;
 import com.study.jpa.chap05.entity.Album;
 import com.study.jpa.chap05.entity.Group;
 import com.study.jpa.chap05.entity.Idol;
 import com.study.jpa.chap05.repository.GroupRepository;
-import com.study.jpa.chap05.repository.IdolRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,4 +55,10 @@ public class IdolService {
                 })
                 .collect(Collectors.toList());
     }
+
+    // 그룹별 평균나이 조회
+    public List<GroupAverageResponse> average() {
+        return groupRepository.groupAverage();
+    }
+
 }

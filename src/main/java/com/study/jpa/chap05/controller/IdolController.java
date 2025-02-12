@@ -1,7 +1,7 @@
 package com.study.jpa.chap05.controller;
 
+import com.study.jpa.chap05.controller.dto.GroupAverageResponse;
 import com.study.jpa.chap05.dto.IdolResponse;
-import com.study.jpa.chap05.entity.Idol;
 import com.study.jpa.chap05.service.IdolService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,4 +26,12 @@ public class IdolController {
         List<IdolResponse> idols = idolService.getIdols();
         return ResponseEntity.ok().body(idols);
     }
+
+    // # 그룹별 평균 나이 조회 요청
+    @GetMapping("/averageAge")
+    public ResponseEntity<?> averageAge() {
+        return ResponseEntity.ok()
+                .body(idolService.average());
+    }
+
 }
