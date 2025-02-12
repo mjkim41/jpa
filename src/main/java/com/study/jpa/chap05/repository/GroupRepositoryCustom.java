@@ -1,6 +1,6 @@
 package com.study.jpa.chap05.repository;
 
-import com.study.jpa.chap05.controller.dto.GroupAverageResponse;
+import com.study.jpa.chap05.dto.GroupAverageResponse;
 
 import java.util.List;
 

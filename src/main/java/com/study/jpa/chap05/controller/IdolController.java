@@ -1,6 +1,6 @@
 package com.study.jpa.chap05.controller;
 
-import com.study.jpa.chap05.controller.dto.GroupAverageResponse;
+import com.study.jpa.chap05.dto.GroupAverageResponse;
 import com.study.jpa.chap05.dto.IdolResponse;
 import com.study.jpa.chap05.service.IdolService;
 import lombok.RequiredArgsConstructor;
